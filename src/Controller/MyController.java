@@ -4,27 +4,24 @@ import Model.Contact;
 import Model.ContactTableModel;
 import Model.Database;
 import View.ContactDialog;
-import View.MyView;
+import View.MainView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 
 public class MyController {
-    private final MyView view;
+    private final MainView view;
     private final ContactTableModel model;
     private final Database db = Database.getInstance();
     private final ContactDialog dialog;
     private Contact editContact = null;
 
-    public MyController(MyView view, ContactTableModel model) {
+    public MyController(MainView view, ContactTableModel model) {
         this.view = view;
         this.model = model;
-        dialog = new ContactDialog(view);
+        this.dialog = new ContactDialog(view);
         initView();
         initModel();
         initController();
@@ -41,8 +38,16 @@ public class MyController {
     private void initController() {
         initWindowsActions();
         initDialogActions();
+        initBtnActions();
         initMenuActions();
         initPopupMenuActions();
+    }
+
+    private void initBtnActions() {
+        view.getAddBtn().addActionListener(addEventListener());
+        view.getEditBtn().addActionListener(editEventListener());
+        view.getDeleteBtn().addActionListener(deleteEventListener());
+        view.getSearchBtn().addActionListener(searchEventListener());
     }
 
     private void initWindowsActions() {
@@ -115,44 +120,12 @@ public class MyController {
 
     private void initMenuActions() {
         view.getExitMenuItem().addActionListener(l -> view.dispatchEvent(new WindowEvent(view, WindowEvent.WINDOW_CLOSING)));
-        view.getAddMenuItem().addActionListener(l -> {
-            dialog.setTitle("Add Contact");
-            dialog.setVisible(true);
-        });
+        view.getAddMenuItem().addActionListener(addEventListener());
     }
 
     private void initPopupMenuActions() {
-        view.getEditMenuItem().addActionListener(l -> {
-            int selectedRow = view.getTable().getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(view, "Select a contact to edit!");
-                return;
-            }
-            dialog.setTitle("Edit Contact");
-            editContact = db.getData().get(selectedRow);
-            dialog.getFirstNameField().setText(editContact.getFirstName());
-            dialog.getLastNameField().setText(editContact.getLastName());
-            dialog.getPhoneField().setText(editContact.getPhone());
-            dialog.getNotesField().setText(editContact.getNotes());
-            dialog.setVisible(true);
-        });
-        view.getDeleteMenuItem().addActionListener(l -> {
-            int selectedRow = view.getTable().getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(view, "Select a contact to delete!");
-                return;
-            }
-            int res = JOptionPane.showConfirmDialog(view, "Delete this contact", "Delete confirm", JOptionPane.OK_CANCEL_OPTION);
-            if (res == JOptionPane.OK_OPTION) {
-                Contact deleteContact = db.getData().get(selectedRow);
-                model.fireTableDataChanged();
-                try {
-                    db.deleteContact(deleteContact);
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(view, e.getMessage());
-                }
-            }
-        });
+        view.getEditMenuItem().addActionListener(editEventListener());
+        view.getDeleteMenuItem().addActionListener(deleteEventListener());
         view.getTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -170,5 +143,67 @@ public class MyController {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         dialog.dispose();
+    }
+
+    private ActionListener addEventListener() {
+        return e -> {
+            dialog.setTitle("Add Contact");
+            dialog.setVisible(true);
+        };
+    }
+
+    private ActionListener editEventListener() {
+        return e -> {
+            int selectedRow = view.getTable().getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(view, "Select a contact to edit!");
+                return;
+            }
+            dialog.setTitle("Edit Contact");
+            editContact = db.getData().get(selectedRow);
+            dialog.getFirstNameField().setText(editContact.getFirstName());
+            dialog.getLastNameField().setText(editContact.getLastName());
+            dialog.getPhoneField().setText(editContact.getPhone());
+            dialog.getNotesField().setText(editContact.getNotes());
+            dialog.setVisible(true);
+        };
+    }
+
+    private ActionListener deleteEventListener() {
+        return event -> {
+            int selectedRow = view.getTable().getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(view, "Select a contact to delete!");
+                return;
+            }
+            int res = JOptionPane.showConfirmDialog(view, "Delete this contact", "Delete confirm", JOptionPane.OK_CANCEL_OPTION);
+            if (res == JOptionPane.OK_OPTION) {
+                Contact deleteContact = db.getData().get(selectedRow);
+                model.fireTableDataChanged();
+                try {
+                    db.deleteContact(deleteContact);
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(view, e.getMessage());
+                }
+            }
+        };
+    }
+
+    private ActionListener searchEventListener() {
+        return ev -> {
+            String phone = view.getSearchField().getText().trim();
+            if (phone.equals(""))
+                JOptionPane.showMessageDialog(view, "Search value cannot be null");
+            else if (!phone.matches("[0-9]+"))
+                JOptionPane.showMessageDialog(view, "Search value must contains only number");
+            else {
+                view.getTable().getSelectionModel().clearSelection();
+                for (int i = 0; i < db.getData().size(); i++) {
+                    if (db.getData().get(i).getPhone().equals(phone)) {
+                        view.getTable().addRowSelectionInterval(i, i);
+                    }
+                }
+            }
+        };
     }
 }
