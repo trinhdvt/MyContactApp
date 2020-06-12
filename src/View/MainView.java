@@ -18,7 +18,7 @@ public class MainView extends JFrame {
 
         initComponent();
 
-        setVisible(true);
+//        setVisible(true);
     }
 
     private void initComponent() {

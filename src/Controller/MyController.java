@@ -25,6 +25,7 @@ public class MyController {
         initView();
         initModel();
         initController();
+        view.setVisible(true);
     }
 
     private void initView() {
