@@ -63,7 +63,6 @@ public class MyController {
                     } catch (SQLException | ClassNotFoundException exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage(),
                                 "Error when loading!", JOptionPane.ERROR_MESSAGE);
-                        exception.printStackTrace();
                         view.dispose();
                     }
                 }).start();
@@ -192,19 +191,34 @@ public class MyController {
 
     private ActionListener searchEventListener() {
         return ev -> {
-            String phone = view.getSearchField().getText().trim();
-            if (phone.equals(""))
+            String searchField = (String) view.getSearchCBB().getSelectedItem();
+            if (searchField == null) return;
+            String searchValue = view.getSearchField().getText().trim();
+            if (searchValue.equals("")) {
                 JOptionPane.showMessageDialog(view, "Search value cannot be null");
-            else if (!phone.matches("[0-9]+"))
+                return;
+            }
+            if (searchField.equals("Phone") && !searchValue.matches("[0-9]+")) {
                 JOptionPane.showMessageDialog(view, "Search value must contains only number");
-            else {
-                view.getTable().getSelectionModel().clearSelection();
-                for (int i = 0; i < db.getData().size(); i++) {
-                    if (db.getData().get(i).getPhone().equals(phone)) {
-                        view.getTable().addRowSelectionInterval(i, i);
-                    }
+                return;
+            }
+            view.getTable().getSelectionModel().clearSelection();
+            for (int i = 0; i < db.getData().size(); i++) {
+                Contact object = db.getData().get(i);
+                String value = "";
+                if (searchField.equals("FirstName"))
+                    value = object.getFirstName();
+                if (searchField.equals("LastName"))
+                    value = object.getLastName();
+                if (searchField.equals("Phone"))
+                    value = object.getPhone();
+                if (searchField.equals("Notes"))
+                    value = object.getNotes();
+                if (value.equalsIgnoreCase(searchValue)) {
+                    view.getTable().addRowSelectionInterval(i, i);
                 }
             }
         };
     }
 }
+

@@ -9,11 +9,13 @@ public class MainView extends JFrame {
     private JPopupMenu popupMenu;
     private JButton addBtn, editBtn, deleteBtn, searchBtn;
     private JTextField searchField;
+    private JComboBox<String> searchCBB;
 
     public MainView(String title) {
         super(title);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setSize(500, 500);
+        setSize(700, 500);
+        setMinimumSize(new Dimension(650, 500));
         setLocationRelativeTo(null);
 
         initComponent();
@@ -32,11 +34,15 @@ public class MainView extends JFrame {
 
     private void createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
+
         JMenu menu = new JMenu("Contacts");
+        menu.setIcon(new ImageIcon("images\\personal.png"));
+
         addMenuItem = new JMenuItem("Add");
-        editMenuItem = new JMenuItem("Edit");
-        deleteMenuItem = new JMenuItem("Delete");
+        addMenuItem.setIcon(new ImageIcon("images\\btn_add.png"));
         exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.setIcon(new ImageIcon("images\\logout.png"));
+
         menu.add(addMenuItem);
         menu.add(exitMenuItem);
         menuBar.add(menu);
@@ -51,30 +57,47 @@ public class MainView extends JFrame {
 
     private void createPopupMenu() {
         popupMenu = new JPopupMenu();
+
+        editMenuItem = new JMenuItem("Edit");
+        editMenuItem.setIcon(new ImageIcon("images\\edit.png"));
+        deleteMenuItem = new JMenuItem("Delete");
+        deleteMenuItem.setIcon(new ImageIcon("images\\btn_delete.png"));
+
         popupMenu.add(editMenuItem);
         popupMenu.add(deleteMenuItem);
     }
 
     private void createTitle() {
         JLabel label = new JLabel("Contacts Manager");
+        label.setIcon(new ImageIcon("images\\person-48.png"));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 26));
         this.getContentPane().add(label, BorderLayout.NORTH);
     }
 
     private void createBtnPanel() {
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         addBtn = new JButton("Add");
+        addBtn.setIcon(new ImageIcon("images\\btn_add.png"));
         editBtn = new JButton("Edit");
+        editBtn.setIcon(new ImageIcon("images\\edit.png"));
         deleteBtn = new JButton("Delete");
+        deleteBtn.setIcon(new ImageIcon("images\\btn_delete.png"));
         searchBtn = new JButton("Search");
+        searchBtn.setIcon(new ImageIcon("images\\btn_search.png"));
         searchField = new JTextField(10);
         searchField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        searchCBB = new JComboBox<>();
+        searchCBB.addItem("FirstName");
+        searchCBB.addItem("LastName");
+        searchCBB.addItem("Phone");
+        searchCBB.addItem("Notes");
         btnPanel.add(addBtn);
         btnPanel.add(editBtn);
         btnPanel.add(deleteBtn);
         btnPanel.add(searchBtn);
         btnPanel.add(searchField);
+        btnPanel.add(searchCBB);
 
         this.getContentPane().add(btnPanel, BorderLayout.SOUTH);
     }
@@ -121,5 +144,9 @@ public class MainView extends JFrame {
 
     public JTextField getSearchField() {
         return searchField;
+    }
+
+    public JComboBox<String> getSearchCBB() {
+        return searchCBB;
     }
 }

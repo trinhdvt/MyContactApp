@@ -22,8 +22,11 @@ public class ContactDialog extends JDialog {
         lastNameField = new JTextField();
         phoneField = new JTextField();
         notesField = new JTextField();
+
         okBtn = new JButton("OK");
+        okBtn.setIcon(new ImageIcon("images\\Select.png"));
         cancelBtn = new JButton("Cancel");
+        cancelBtn.setIcon(new ImageIcon("images\\close.png"));
 
         centerPanel = new JPanel(new GridLayout(4, 2, 5, 5));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
