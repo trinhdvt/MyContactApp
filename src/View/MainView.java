@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainView extends JFrame {
-    private JMenuItem addMenuItem, editMenuItem, deleteMenuItem, exitMenuItem;
+    private JMenuItem addMenuItem, editMenuItem, deleteMenuItem, exitMenuItem, aboutMenuItem;
     private JTable table;
     private JPopupMenu popupMenu;
     private JButton addBtn, editBtn, deleteBtn, searchBtn;
@@ -35,17 +35,23 @@ public class MainView extends JFrame {
     private void createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu menu = new JMenu("Contacts");
-        menu.setIcon(new ImageIcon("images\\personal.png"));
+        JMenu contactMenu = new JMenu("Contacts");
+        contactMenu.setIcon(new ImageIcon("images\\personal.png"));
 
         addMenuItem = new JMenuItem("Add");
         addMenuItem.setIcon(new ImageIcon("images\\btn_add.png"));
         exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.setIcon(new ImageIcon("images\\logout.png"));
+        contactMenu.add(addMenuItem);
+        contactMenu.add(exitMenuItem);
 
-        menu.add(addMenuItem);
-        menu.add(exitMenuItem);
-        menuBar.add(menu);
+        JMenu helpMenu = new JMenu("Help");
+        aboutMenuItem = new JMenuItem("About");
+        helpMenu.add(aboutMenuItem);
+
+        menuBar.add(contactMenu);
+        menuBar.add(helpMenu);
+
         this.setJMenuBar(menuBar);
     }
 
@@ -120,6 +126,10 @@ public class MainView extends JFrame {
 
     public JMenuItem getExitMenuItem() {
         return exitMenuItem;
+    }
+
+    public JMenuItem getAboutMenuItem() {
+        return aboutMenuItem;
     }
 
     public JPopupMenu getPopupMenu() {
