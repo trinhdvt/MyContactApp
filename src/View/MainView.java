@@ -68,7 +68,7 @@ public class MainView extends JFrame {
     }
 
     private void createTitle() {
-        JLabel label = new JLabel("Contacts Manager");
+        JLabel label = new JLabel("My Contacts");
         label.setIcon(new ImageIcon("images\\person-48.png"));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 26));
