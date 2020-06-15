@@ -3,12 +3,12 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 
-public class ContactDialog extends JDialog {
+public class AddContactDialog extends JDialog {
     private JTextField firstNameField, lastNameField, phoneField, notesField;
     private JButton okBtn, cancelBtn;
     private JPanel centerPanel;
 
-    public ContactDialog(JFrame parent) {
+    public AddContactDialog(JFrame parent) {
         super(parent);
         setSize(300, 204);
         setResizable(false);

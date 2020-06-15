@@ -3,7 +3,7 @@ package Controller;
 import Model.Contact;
 import Model.ContactTableModel;
 import Model.Database;
-import View.ContactDialog;
+import View.AddContactDialog;
 import View.MainView;
 
 import javax.swing.*;
@@ -15,13 +15,13 @@ public class MyController {
     private final MainView view;
     private final ContactTableModel model;
     private final Database db = Database.getInstance();
-    private final ContactDialog dialog;
+    private final AddContactDialog dialog;
     private Contact editContact = null;
 
     public MyController(MainView view, ContactTableModel model) {
         this.view = view;
         this.model = model;
-        this.dialog = new ContactDialog(view);
+        this.dialog = new AddContactDialog(view);
         initView();
         initModel();
         initController();
