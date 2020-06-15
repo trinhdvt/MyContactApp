@@ -121,8 +121,8 @@ public class MyController {
     private void initMenuActions() {
         view.getExitMenuItem().addActionListener(l -> view.dispatchEvent(new WindowEvent(view, WindowEvent.WINDOW_CLOSING)));
         view.getAddMenuItem().addActionListener(addEventListener());
-        view.getAboutMenuItem().addActionListener(
-                l -> JOptionPane.showMessageDialog(view, "SVTH: Đỗ Văn Trình\n" +
+        view.getAboutMenuItem().addActionListener(l -> JOptionPane.showMessageDialog(view,
+                "SVTH: Đỗ Văn Trình\n" +
                         "Lớp: 18TCLC-Nhật\n" +
                         "MSSV: 1021280276")
         );
@@ -147,6 +147,7 @@ public class MyController {
         for (Component component : dialog.getCenterPanel().getComponents())
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
+        editContact = null;
         dialog.dispose();
     }
 
